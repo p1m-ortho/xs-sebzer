@@ -1,6 +1,6 @@
 # Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР)
 
-> The Sebzer script provides citation export support for [eLIBRARY.RU](https://elibrary.ru) ([Russian Science Citation Index](https://en.m.wikipedia.org/wiki/Russian_Science_Citation_Index)), a Russian PubMed-MEDLINE-like (with a broader coverage though) free-to-use national bibliographic database.
+> The Sebzer [Tampermonkey](https://tampermonkey.net) script provides citation export support for [eLIBRARY.RU](https://elibrary.ru) ([Russian Science Citation Index](https://en.m.wikipedia.org/wiki/Russian_Science_Citation_Index)), a Russian PubMed-MEDLINE-like (with a broader coverage though) free-to-use national bibliographic database.
 > 
 > The tool is in beta, only batch BibTeX export is supported yet.
 > 
