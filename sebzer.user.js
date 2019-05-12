@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         sebzer
 // @namespace    http://p1m.org/
-// @version      0.1
+// @version      0.1.1
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://elibrary.ru/*
@@ -33,7 +33,7 @@
     var filename = 'elibrary_ru';
     var ext = "bib";
     var ref_regex = /^(.+)\. (\d{4})\. (Т\.? ([\d\w\-\(\) ]+)\. )?(№\.? ([\d\w\-\(\) ]+)\. )?(С)\. ([\d\w\-]+)\.$/i;
-    var au_regex = /^(.*) ([^ ]+?)\.?$/i;
+    var au_regex = /^(.*?) ?([^ ]+?)\.?$/i;
     var bib_regex = /^@\w+{.*,$/gmi;
 
     $(document).ready(function() {
@@ -55,14 +55,25 @@
                 var auarr = austr.split(', ');
                 auarr.forEach(function(val, i) {
                     var au = val.match(au_regex);
-                    var lastname = au[1];
-                    var firstname = au[2].replace(/[^a-za-я\d]+/gi,' ');
-                    var name = lastname + ', ' + firstname;
-                    author.push({
-                        lastname: lastname,
-                        firstname: firstname,
-                        name: name
-                    });
+                    var name;
+                    if (au[1])
+                    {
+                        var lastname = au[1];
+                        var firstname = au[2].replace(/[^a-za-я\d]+/gi,' ');
+                        name = lastname + ', ' + firstname;
+                        author.push({
+                            lastname: lastname,
+                            firstname: firstname,
+                            name: name
+                        });
+                    }
+                    else
+                    {
+                        name = au[2];
+                        author.push({
+                            name: name
+                        });
+                    }
                 });
                 bibjson.author = JSON.parse(JSON.stringify(author));
             }
