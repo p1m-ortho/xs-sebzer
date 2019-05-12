@@ -34,7 +34,7 @@
     var ext = "bib";
     var ref_regex = /^(.+)\. (\d{4})\. (Т\.? ([\d\wА-я.\-\(\) ]+)\. )?(№\.? ([\d\wА-я.\-\(\) ]+)\. )?(С)\. ([\d\w\-]+)\.$/i;
     var au_regex = /^(.*?) ?([^ ]+?)\.?$/i;
-    var bib_regex = /^@\w+{.*,$/gmi; var ii = 0;
+    var bib_regex = /^@\w+{.*,$/gmi;
 
     $(document).ready(function() {
         $('#restab').before(canvas);
@@ -44,7 +44,7 @@
         $('tr')
             .filter(function() {
             return this.id.match(/^a\d+$/g);
-        }).children().filter('td[align="left"]').each(function() { ii++;
+        }).children().filter('td[align="left"]').each(function() {
             var bibjson = {type: "misc"};
             var bibkey = $(this).parent().attr('id');;
             var hasAuthor = ($(this).has('i').length) ? true : false;
@@ -101,7 +101,7 @@
                         bibjson.title = "Б.н.";
                 }
                 else
-                { alert(ii);
+                {
                     e.notArticle = true;
                     bibjson.note = refstr;
                     if (refstr.match(/^\d{4}$/))
