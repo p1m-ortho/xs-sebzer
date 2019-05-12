@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         sebzer
 // @namespace    http://p1m.org/
-// @version      0.1.1
+// @version      0.1.2
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://elibrary.ru/*
@@ -32,7 +32,7 @@
     var mime = "application/x-bibtex;charset=utf-8";
     var filename = 'elibrary_ru';
     var ext = "bib";
-    var ref_regex = /^(.+)\. (\d{4})\. (Т\.? ([\d\w\-\(\) ]+)\. )?(№\.? ([\d\w\-\(\) ]+)\. )?(С)\. ([\d\w\-]+)\.$/i;
+    var ref_regex = /^(.+)\. (\d{4})\. (Т\.? ([\d\w\-\(\) ]+)\. )?(№\.? ([\d\wА-я\-\(\) ]+)\. )?(С)\. ([\d\w\-]+)\.$/i;
     var au_regex = /^(.*?) ?([^ ]+?)\.?$/i;
     var bib_regex = /^@\w+{.*,$/gmi;
 
