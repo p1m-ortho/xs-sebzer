@@ -12,9 +12,9 @@
 
 В настоящее время поддерживается экспорт только со страниц результатов поискового запроса, только с ограничением по типу публикации `«статьи в журналах»` и только в формате [BibTeX](https://ru.wikipedia.org/wiki/BibTeX#Библиографические_базы:_bib-файлы).
 
-> If correctly set up, the script will pop an `Экспортировать в файл (BibTeX)` [Export to a file (BibTeX)] button just before the first search query result, as shown:
+> If correctly set up, the script will pop an `Экспортировать в файл (BibTeX)` [Export to a file (BibTeX)] button just before the search query results table, as shown:
 
-При корректной настройке скрипта сразу перед первым результатом поисковой выдачи появится кнопка `Экспортировать в файл (BibTeX)`, вот так:
+При корректной настройке скрипта сразу перед таблицей с результатами поисковой выдачи появится кнопка `Экспортировать в файл (BibTeX)`, вот так:
 
 ![Скриншот страницы поисковой выдачи с кнопкой | Screenshot of a query results page with the button](Screenshot_2019-10-31-21-59-43-754_org.mozilla.firefox.png)
 
