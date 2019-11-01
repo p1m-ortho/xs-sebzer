@@ -6,7 +6,6 @@
 // @author       Павел Желнов
 // @match        http*://elibrary.ru/*
 // @grant        none
-// @require      https://code.jquery.com/jquery-latest.min.js
 // @require      https://cdn.rawgit.com/eligrey/FileSaver.js/master/dist/FileSaver.min.js
 // @require      https://cdn.rawgit.com/larsgw/citation.js/archive/citation.js/citation-0.4.0-10.min.js
 // ==/UserScript==
