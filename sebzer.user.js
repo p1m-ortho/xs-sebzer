@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Sebzer
 // @namespace    http://p1m.org/
-// @version      0.2.1
+// @version      0.2.2
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://elibrary.ru/*
@@ -37,7 +37,7 @@ $(function() {
     var eItemAspNote = '<div id="sebzer-enotsearchnote"><p style="text-indent: 0">';
     eItemAspNote += 'Экспорт со страниц отдельных записей не поддерживается. Чтобы преодолеть это ограничение, добавьте эту запись в какую-либо подборку и затем выгрузьте содержимое этой подборки.';
     eItemAspNote += '</p></div>';
-    var e = { notSearch: false, itemAsp: false, notArticle: false };
+    var e = { notSearch: false, itemAsp: false, popUpWindow: false, notArticle: false };
     var mime = "application/x-bibtex;charset=utf-8";
     var filename = 'elibrary_ru';
     var ext = "bib";
@@ -45,12 +45,19 @@ $(function() {
     var au_regex = /^(.*?) ?([^ ]+?)\.?$/i;
     var bib_regex = /^@\w+{.*,$/gmi;
 
-    $('table').before(canvas);
-    $('#sebzer-canvas').attr("style", style);
     if (!$('#thepage').length || $('#thepage').prop('outerHTML').toLowerCase().search(/всего найдено публикаций:\s+<\/font>/) === -1) {
         e.notSearch = true;
-        if(location.pathname.substring(1) == 'item.asp')
-            e.itemAsp = true;
+        pagename = location.pathname.substring(1);
+        switch(pagename) {
+            case 'item.asp':
+                e.itemAsp = true;
+                break;
+
+            case 'itembox_item_add2.asp':
+            case 'itembox_item_add.asp':
+                e.popUpWindow = true;
+                break;
+        }
     }
     else {
         $('tr').filter(function(){
@@ -127,23 +134,21 @@ $(function() {
         });
     }
 
-    //for (var note in e) {
-    //    if (e[note]) {
-            $('#sebzer-canvas').append(eSebzerNote);
-    //        break;
-    //    }
-    //}
+    if (!e.popUpWindow) {
+        $('table').before(canvas);
+        $('#sebzer-canvas').attr("style", style);
+        $('#sebzer-canvas').append(eSebzerNote);
+        if(e.notSearch) {
+            var note = (e.itemAsp) ? eItemAspNote : eNotSearchNote;
+            $('#sebzer-canvas').append(note);
+        }
+        else {
+            if(e.notArticle)
+                $('#sebzer-canvas').append(eNotArticleNote);
 
-    if(e.notSearch) {
-        var note = (e.itemAsp) ? eItemAspNote : eNotSearchNote;
-        $('#sebzer-canvas').append(note);
-    }
-    else {
-        if(e.notArticle)
-            $('#sebzer-canvas').append(eNotArticleNote);
-
-        $('#sebzer-canvas').append(button);
-        $('#sebzer-button-pic').click(sebzer_bibtex);
-        $('#sebzer-button-text').click(sebzer_bibtex);
+            $('#sebzer-canvas').append(button);
+            $('#sebzer-button-pic').click(sebzer_bibtex);
+            $('#sebzer-button-text').click(sebzer_bibtex);
+        }
     }
 });
