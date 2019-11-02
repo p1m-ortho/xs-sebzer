@@ -47,7 +47,7 @@ $(function() {
 
     if (!$('#thepage').length || $('#thepage').prop('outerHTML').toLowerCase().search(/всего найдено публикаций:\s+<\/font>/) === -1) {
         e.notSearch = true;
-        pagename = location.pathname.substring(1);
+        var pagename = location.pathname.substring(1);
         switch(pagename) {
             case 'item.asp':
                 e.itemAsp = true;
@@ -59,8 +59,7 @@ $(function() {
                 break;
         }
     }
-    else {
-        $('tr').filter(function(){
+    else $('tr').filter(function(){
             return this.id.match(/^a\d+$/g);
         })
         .children().filter('td[align="left"]').each(function(){
@@ -132,7 +131,6 @@ $(function() {
             bibtex = bibtex.replace(bib_regex, label);
             record.add(bibtex);
         });
-    }
 
     if (!e.popUpWindow) {
         $('table').before(canvas);
