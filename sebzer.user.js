@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Sebzer
 // @namespace    http://p1m.org/
-// @version      0.1.10
+// @version      0.1.11
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://elibrary.ru/*
@@ -15,21 +15,29 @@ $(function() {
     var elibrary = "https://elibrary.ru";
     const Cite = require('citation-js');
     const record = new Cite();
+    var sebzer_bibtex = function () {
+        var text = record.format('bibtex');
+        var blob = new Blob([text], {type: mime});
+        saveAs(blob, filename+"."+ext);
+    };
     var canvas = '<div id="sebzer-canvas"></div>';
-    var style = "width: 400; text-align: justify";
-    var button = '<div id="sebzer-button-canvas" style="text-align: center"><button id="sebzer-button">';
+    var style = "width: 630px; text-align: justify; padding: 10px; margin: 10px; background-color: #555555; color: white";
+    var button = '<div id="sebzer-button-canvas"><table><tr><td width="15%" align="center" valign="top"><a id="sebzer-button-pic" href="javascript:sebzer_bibtex()" style="color: white"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td><td width="85%" align="left" valign="middle"><a id="sebzer-button-text" href="javascript:sebzer_bibtex()" style="color: white">';
     button += 'Экспортировать в файл (BibTeX)';
-    button += '</button></div>';
-    var eSebzerNote = '<p id="sebzer-esebzernote" class="sebzer-error">';
-    eSebzerNote += 'Сообщение от СЕБЗЕР:';
-    eSebzerNote += '</p>';
-    var eNotArticleNote = '<p id="sebzer-enotarticlenote" class="sebzer-error">';
+    button += '</a></td></tr></table></div>';
+    var eSebzerNote = '<div id="sebzer-esebzernote" style="font-weight: bold; color: #F26C4F"><p style="text-indent: 0">';
+    eSebzerNote += 'СРЕДСТВО ЭКСПОРТА БИБЛИОГРАФИЧЕСКИХ ЗАПИСЕЙ';
+    eSebzerNote += '</p></div>';
+    var eNotArticleNote = '<div id="sebzer-enotarticlenote"><p style="text-indent: 0">';
     eNotArticleNote += 'В выдаче обнаружены записи с типом публикации, отличным от «статьи в журналах». Обращаем внимание, что такие записи не будут полноценно распарсены. Для исключения таких записей можно в параметрах поиска снять галочки со всех остальных типов публикации.';
-    eNotArticleNote += '</p>';
-    var eNotSearchNote = '<p id="sebzer-enotsearchnote" class="sebzer-error">';
+    eNotArticleNote += '</p></div>';
+    var eNotSearchNote = '<div id="sebzer-enotsearchnote"><p style="text-indent: 0">';
     eNotSearchNote += 'Это не поисковая выдача, поэтому экспорт записей с этой страницы не будет возможен. Вы сможете выгрузить эти записи, если добавите их в какую-либо подборку публикаций, так как экспорт содержимого таких подборок — возможен.';
-    eNotSearchNote += '</p>';
-    var e = { notSearch: false, notArticle: false };
+    eNotSearchNote += '</p></div>';
+    var eItemAspNote = '<div id="sebzer-enotsearchnote"><p style="text-indent: 0">';
+    eItemAspNote += 'Экспорт со страниц отдельных записей не поддерживается. Чтобы преодолеть это ограничение, добавьте эту запись в какую-либо подборку и затем выгрузьте содержимое этой подборки.';
+    eItemAspNote += '</p></div>';
+    var e = { notSearch: false, itemAsp: false, notArticle: false };
     var mime = "application/x-bibtex;charset=utf-8";
     var filename = 'elibrary_ru';
     var ext = "bib";
@@ -37,10 +45,13 @@ $(function() {
     var au_regex = /^(.*?) ?([^ ]+?)\.?$/i;
     var bib_regex = /^@\w+{.*,$/gmi;
 
-    $('#restab').before(canvas);
+    $('#MathJax_Message').after(canvas);
     $('#sebzer-canvas').attr("style", style);
-    if ($('#thepage').prop('outerHTML').toLowerCase().indexOf('всего найдено публикаций:') === -1)
+    if (!$('#thepage').length || $('#thepage').prop('outerHTML').toLowerCase().search(/всего найдено публикаций:\s+<\/font>/) === -1) {
         e.notSearch = true;
+        if(location.pathname.substring(1) == 'item.asp')
+            e.itemAsp = true;
+    }
     else {
         $('tr').filter(function(){
             return this.id.match(/^a\d+$/g);
@@ -116,24 +127,23 @@ $(function() {
         });
     }
 
-    for (var note in e) {
-        if (e[note]) {
+    //for (var note in e) {
+    //    if (e[note]) {
             $('#sebzer-canvas').append(eSebzerNote);
-            break;
-        }
-    }
+    //        break;
+    //    }
+    //}
 
-    if(e.notSearch)
-        $('#sebzer-canvas').append(eNotSearchNote);
+    if(e.notSearch) {
+        var note = (e.itemAsp) ? eItemAspNote : eNotSearchNote;
+        $('#sebzer-canvas').append(note);
+    }
     else {
         if(e.notArticle)
             $('#sebzer-canvas').append(eNotArticleNote);
 
         $('#sebzer-canvas').append(button);
-        $('#sebzer-button').click(function () {
-            var text = record.format('bibtex');
-            var blob = new Blob([text], {type: mime});
-            saveAs(blob, filename+"."+ext);
-        });
+        $('#sebzer-button-pic').click(sebzer_bibtex);
+        $('#sebzer-button-text').click(sebzer_bibtex);
     }
 });
