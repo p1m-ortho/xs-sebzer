@@ -10,6 +10,10 @@
 
 Добавляет в [eLIBRARY.RU](https://elibrary.ru) возможности экспорта библиографических записей, подобные таковым в [PubMed](https://pubmed.gov).
 
+> **[eLIBRARY.RU have launched a paid API](https://elibrary.ru/projects/api/api_info.asp) explicitly providing citation export function. That is, as it appears, the company does not at all plan to make this function public. This gives a freeware product such as Sebzer extra importance.**
+
+**[eLIBRARY.RU запустили платный API](https://elibrary.ru/projects/api/api_info.asp), явно предоставляющий функцию экспорта записей. То есть похоже, что компания отнюдь не планирует реализовывать эту функцию общедоступно. В связи с этим такой бесплатный продукт, как СЕБЗЕР, приобретает особую актуальность.**
+
 В настоящее время поддерживается экспорт только со страниц результатов поискового запроса, только с ограничением по типу публикации `«статьи в журналах»` и только в формате [BibTeX](https://ru.wikipedia.org/wiki/BibTeX#Библиографические_базы:_bib-файлы).
 
 > If correctly set up, the script will pop an `Экспортировать в файл (BibTeX)` [Export to a file (BibTeX)] button before the search query results table, as shown:
