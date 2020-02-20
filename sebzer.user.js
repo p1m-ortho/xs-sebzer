@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         Sebzer
 // @namespace    https://p1m.org/
-// @version      0.2.5
+// @version      0.2.6
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://*.elibrary.ru/*
 // @grant        none
 // @require      https://cdn.rawgit.com/eligrey/FileSaver.js/master/dist/FileSaver.min.js
-// @require      https://cdn.rawgit.com/larsgw/citation.js/archive/citation.js/citation-0.4.0-10.min.js
+// @require      https://cdn.jsdelivr.net/npm/citation-js
 // ==/UserScript==
 
 $(function() {
@@ -64,7 +64,7 @@ $(function() {
         })
         .children().filter('td[align="left"]').each(function(){
             var bibjson = {type: "misc"};
-            var bibkey = $(this).parent().attr('id');;
+            var bibkey = $(this).parent().attr('id');
             var hasAuthor = ($('font',this).has('i').length == 1) ? true : false;
             if (hasAuthor) {
                 var author = [];
@@ -130,7 +130,7 @@ $(function() {
             }
             var bibtex = new Cite(bibjson).format('bibtex');
             var label = "@" + bibjson.type + "{" + bibkey + ",";
-            bibtex = bibtex.replace(bib_regex, label);
+            bibtex = bibtex.replace(bib_regex, label).replace(/\{\\[^\}]+}/g,'�');
             record.add(bibtex);
         });
 
