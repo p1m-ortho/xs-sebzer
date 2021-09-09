@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         Sebzer
 // @namespace    https://p1m.org/
-// @version      0.2.6
+// @version      0.2.7
 // @description  Средство экспорта библиографических записей из eLIBRARY.RU (СЕБЗЕР). Добавляет в eLIBRARY.RU возможности экспорта библиографических записей, подобные таковым в PubMed. В настоящее время поддерживается экспорт только со страниц выдачи, только с ограничением по типу публикации «статьи в журналах» и только в формате BibTeX.
 // @author       Павел Желнов
 // @match        http*://*.elibrary.ru/*
 // @grant        none
-// @require      https://cdn.rawgit.com/eligrey/FileSaver.js/master/dist/FileSaver.min.js
-// @require      https://cdn.jsdelivr.net/npm/citation-js
+// @require      https://cdn.rawgit.com/eligrey/FileSaver.js/v2.0.2/dist/FileSaver.min.js
+// @require      https://cdn.jsdelivr.net/npm/citation-js@0.4.10/build/citation.min.js
 // ==/UserScript==
 
 $(function() {
